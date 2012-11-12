@@ -13,7 +13,7 @@ public class CellState : MonoBehaviour {
 	public enum CellColors {Blue, Red, Orange};	
 
 	// the cell's color
-	public CellColors cellColor {get; set;}
+	public CellColors cellColor = CellColors.Blue;
 
 	// health
 	private int health;
@@ -34,6 +34,20 @@ public class CellState : MonoBehaviour {
 	void Start () {
 		// start at the largest state
 		ChangeState(States.Large);
+
+		// use the correct frame_name for the color of the cell
+		StartCoroutine(SetTextureFrame("orange"));
+	}
+
+
+	// set the texture frame for the cell. yield so that it is sure to fire on a frame after
+	// Start is called.
+	IEnumerator SetTextureFrame(string frameColor) {
+		yield return null;
+
+		string frameName = frameColor + "_cell_" + "large";
+		OTSpriteAtlasCocos2D atlas = GameObject.Find("Objects").GetComponent<OTSpriteAtlasCocos2D>();
+		GetComponent<OTSprite>().frameIndex = atlas.GetFrameIndex(frameName);
 	}
 
 
@@ -45,11 +59,6 @@ public class CellState : MonoBehaviour {
 		adjustHealthForState(newState);
 		adjustAttackRadiusForState(newState);
 		currentState = newState;
-
-		// scale the cell
-		if (currentState == States.Large) transform.localScale = new Vector3(1.0f, 1.0f, 0.0f);
-		else if (currentState == States.Medium) transform.localScale = new Vector3(0.7f, 0.7f, 0.0f);
-		else if (currentState == States.Small) transform.localScale = new Vector3(0.4f, 0.4f, 0.0f);
 	}
 
 
