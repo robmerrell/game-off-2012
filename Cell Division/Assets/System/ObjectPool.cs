@@ -21,6 +21,7 @@ public class ObjectPool : MonoBehaviour {
 		for (int i = 0; i < poolAmount; i++) {
 			GameObject newobj = Instantiate(poolPrefab) as GameObject;
 			newobj.SetActiveRecursively(false);
+			newobj.transform.parent = transform;
 			pool[i] = newobj;
 		}
 	}
